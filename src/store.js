@@ -18,4 +18,4 @@ const composedEnhancers = compose(
   ...enhancers
 )
 
-export default createStore(initialState, composedEnhancers)
+export default createStore(rootReducer, initialState, composedEnhancers)
