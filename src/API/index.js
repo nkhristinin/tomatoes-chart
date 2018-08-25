@@ -2,10 +2,11 @@
 
 import { getTime, subMinutes } from "date-fns"
 
-const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min
+const getRandomInt = (min: number, max: number): number =>
+  Math.floor(Math.random() * (max - min)) + min
 
 /**
- * Ger random array of ticks from some sdate
+ * Ger random array of ticks from some date
  */
 const getRandomPastTicks = (fromDate: number, count: number): Array<Tick> => {
   return Array(count)
@@ -39,11 +40,19 @@ const getRandomPastTicks = (fromDate: number, count: number): Array<Tick> => {
     .reverse()
 }
 
-export const makeGetTicks = () => {
-  let data: Array<Tick> = getRandomPastTicks(new Date(), 100)
+/**
+ * Factory for creating function which return list of ticks
+ * Has a clouse, and after some time add ticks
+ * @example
+ * const getTicks = makeGetTicks(5)
+ * getTicks() // return 5 ticks
+ * getTicks() // return 6 ticks after 3 seconds
+ */
+export const makeGetTicks = (intitialCount: number = 100) => {
+  let data: Array<Tick> = getRandomPastTicks(new Date(), intitialCount)
 
-  const getTicks = () => {
-    const loadData = () =>
+  const getTicks = (): Array<Tick> => {
+    const addTicks = () =>
       setTimeout(() => {
         const prevItem = data[data.length - 1]
         const newCallsAdded = getRandomInt(0, 3)
@@ -56,10 +65,10 @@ export const makeGetTicks = () => {
           segmentSize: prevItem.segmentSize + newCallsAdded - newCallsRemoved
         })
 
-        loadData()
+        addTicks()
       }, 3000)
 
-    loadData()
+    addTicks()
     return data
   }
 
