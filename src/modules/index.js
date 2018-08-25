@@ -1,6 +1,8 @@
+// @flow
+
 import { combineReducers } from "redux"
-import tomatoes from "./tomatoes"
+import ticks from "./ticks"
 
 export default combineReducers({
-  tomatoes
+  ticks
 })

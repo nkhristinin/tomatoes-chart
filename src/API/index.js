@@ -50,9 +50,13 @@ const getRandomPastTicks = (fromDate: number, count: number): Array<Tick> => {
  */
 export const makeGetTicks = (intitialCount: number = 100) => {
   let data: Array<Tick> = getRandomPastTicks(new Date(), intitialCount)
+  let isLoad = false
 
   const getTicks = (): Array<Tick> => {
-    const addTicks = () =>
+    const addTicks = () => {
+      if (isLoad) return
+      isLoad = true
+
       setTimeout(() => {
         const prevItem = data[data.length - 1]
         const newCallsAdded = getRandomInt(0, 3)
@@ -65,8 +69,10 @@ export const makeGetTicks = (intitialCount: number = 100) => {
           segmentSize: prevItem.segmentSize + newCallsAdded - newCallsRemoved
         })
 
+        isLoad = false
         addTicks()
       }, 3000)
+    }
 
     addTicks()
     return data
