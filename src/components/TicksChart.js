@@ -15,11 +15,7 @@ import { format } from "date-fns"
 
 const TicksChart = ({ ticks, timeFormat, paddingTime }) => (
   <ResponsiveContainer width="100%" height={500}>
-    <ComposedChart
-      data={ticks}
-      stackOffset="sign"
-      margin={{ top: 5, right: 120, left: 0, bottom: 5 }}
-    >
+    <ComposedChart data={ticks} stackOffset="sign">
       <CartesianGrid strokeDasharray="5 5" />
       <XAxis
         type="number"
@@ -31,7 +27,13 @@ const TicksChart = ({ ticks, timeFormat, paddingTime }) => (
         scale="time"
         dataKey="timestamp"
       />
-      <YAxis />
+      <YAxis
+        label={{
+          value: "Total number of profiles",
+          angle: -90,
+          position: "insideLeft"
+        }}
+      />
       <Tooltip
         labelFormatter={unixtimestamp => format(unixtimestamp, timeFormat)}
       />

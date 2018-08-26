@@ -8,12 +8,14 @@ const StatusView = ({
   lastUpdateRemoved
 }) => (
   <div>
-    <p>Your current size of segment is {selectionSize}</p>
-    <p>
-      Last upadte was <b>{format(lastUpdateTime, "D MMM, HH:mm")}</b>. Added:{" "}
+    <div className="status-main ">
+      Your current size of segment is <b>{selectionSize}.</b>
+    </div>
+    <div>
+      Last update was <b>{format(lastUpdateTime, "D MMM, HH:mm")}</b>. Added:{" "}
       <b>{lastUpdateAdded}</b> calls. Removed:{" "}
       <b>{Math.abs(lastUpdateRemoved)}</b> calls.
-    </p>
+    </div>
   </div>
 )
 
