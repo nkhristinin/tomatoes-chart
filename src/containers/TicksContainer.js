@@ -2,7 +2,12 @@
 
 import React from "react"
 import { connect } from "react-redux"
-import { getTicks, fetchTicks } from "../modules/ticks"
+import {
+  getTicks,
+  fetchTicks,
+  groupByOneDay,
+  groupByFiveMinutes
+} from "../modules/ticks"
 import TicksChart from "../components/TicksChart"
 
 class TicksContainer extends React.Component {
@@ -23,7 +28,16 @@ class TicksContainer extends React.Component {
   }
 
   render() {
-    return <TicksChart ticks={this.props.ticks} />
+    const { ticks, groupByFiveMinutes, groupByOneDay } = this.props
+    return (
+      <div>
+        <div>
+          <button onClick={groupByFiveMinutes}>5 minutes</button>
+          <button onClick={() => groupByOneDay()}>one day</button>
+        </div>
+        <TicksChart ticks={this.props.ticks} />
+      </div>
+    )
   }
 }
 
@@ -32,7 +46,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-  fetchTicks: fetchTicks
+  fetchTicks,
+  groupByFiveMinutes,
+  groupByOneDay
 }
 
 export default connect(

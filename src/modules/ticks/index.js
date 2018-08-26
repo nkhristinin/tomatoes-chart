@@ -6,6 +6,7 @@ const fetchTicksFromAPI = makeGetTicks()
 
 // constants
 const GET_TICKS = "ticks/GET_TICKS"
+const GROUP_BY = "ticks/GROUP_BY"
 
 // reducers
 type TicksStateType = {
@@ -16,6 +17,8 @@ type TicksStateType = {
 
 const FIVE_MINUTES = 1000 * 60 * 5
 const ONE_HOUR = 1000 * 60 * 60
+const ONE_DAY = ONE_HOUR * 24
+const ONE_MONTH = ONE_DAY * 30
 
 const initialState: TicksStateType = {
   data: [],
@@ -33,12 +36,29 @@ export default (
         ...state,
         data: action.ticks
       }
+    case GROUP_BY:
+      return {
+        ...state,
+        groupedBy: action.groupedBy,
+        ticksCount: action.ticksCount
+      }
     default:
       return state
   }
 }
 
-// selectors
+//selectors
+
+const groupBy = (groupedBy, ticksCount) => ({
+  type: GROUP_BY,
+  groupedBy,
+  ticksCount
+})
+
+export const groupByFiveMinutes = () =>
+  groupBy(FIVE_MINUTES, ONE_HOUR / FIVE_MINUTES)
+
+export const groupByOneDay = () => groupBy(ONE_DAY, ONE_MONTH / ONE_DAY)
 
 // Return ticks for charts
 // for opmiziation can use reselect or other solutions for memoisation
