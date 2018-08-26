@@ -8,9 +8,11 @@ import {
   groupByOneDay,
   groupByFiveMinutes,
   getTimeFormat,
-  getGroupTime
+  getGroupTime,
+  getLastTickFromAPI
 } from "../modules/ticks"
 import TicksChart from "../components/TicksChart"
+import StatusView from "../components/StatusView"
 
 class TicksContainer extends React.Component {
   componentDidMount() {
@@ -35,19 +37,31 @@ class TicksContainer extends React.Component {
       groupByFiveMinutes,
       groupByOneDay,
       timeFormat,
-      groupTime
+      groupTime,
+      lastTickFromAPI
     } = this.props
+
     return (
       <div>
-        <div>
-          <button onClick={groupByFiveMinutes}>5 minutes</button>
-          <button onClick={() => groupByOneDay()}>one day</button>
-        </div>
-        <TicksChart
-          paddingTime={groupTime}
-          timeFormat={timeFormat}
-          ticks={ticks}
-        />
+        {lastTickFromAPI && (
+          <div>
+            <StatusView
+              selectionSize={lastTickFromAPI.segmentSize}
+              lastUpdateTime={lastTickFromAPI.timestamp}
+              lastUpdateAdded={lastTickFromAPI.totalCallsAdded}
+              lastUpdateRemoved={lastTickFromAPI.totalCallsRemoved}
+            />
+            <div>
+              <button onClick={groupByFiveMinutes}>5 minutes</button>
+              <button onClick={() => groupByOneDay()}>one day</button>
+            </div>
+            <TicksChart
+              paddingTime={groupTime}
+              timeFormat={timeFormat}
+              ticks={ticks}
+            />
+          </div>
+        )}
       </div>
     )
   }
@@ -56,7 +70,8 @@ class TicksContainer extends React.Component {
 const mapStateToProps = state => ({
   ticks: getTicks(state),
   timeFormat: getTimeFormat(state),
-  groupTime: getGroupTime(state)
+  groupTime: getGroupTime(state),
+  lastTickFromAPI: getLastTickFromAPI(state)
 })
 
 const mapDispatchToProps = {

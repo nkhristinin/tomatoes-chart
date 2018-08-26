@@ -79,6 +79,9 @@ export const getTicks = ({ ticks: { data, groupedBy, ticksCount } }) =>
     ticksCount
   )
 
+export const getLastTickFromAPI = state =>
+  state.ticks.data[state.ticks.data.length - 1]
+
 export const getTimeFormat = state => state.ticks.timeFormat
 
 export const getGroupTime = state => state.ticks.groupedBy
