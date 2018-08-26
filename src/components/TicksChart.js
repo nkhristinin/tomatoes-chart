@@ -14,7 +14,7 @@ import {
 import { format } from "date-fns"
 
 const TicksChart = ({ ticks, timeFormat, paddingTime }) => (
-  <ResponsiveContainer width="95%" height={500}>
+  <ResponsiveContainer width="100%" height={500}>
     <ComposedChart
       data={ticks}
       stackOffset="sign"
@@ -32,12 +32,29 @@ const TicksChart = ({ ticks, timeFormat, paddingTime }) => (
         dataKey="timestamp"
       />
       <YAxis />
-      <Tooltip />
+      <Tooltip
+        labelFormatter={unixtimestamp => format(unixtimestamp, timeFormat)}
+      />
       <Legend />
       <ReferenceLine y={0} stroke="#000" />
-      <Bar dataKey="totalCallsAdded" fill="#8884d8" stackId="stack" />
-      <Bar dataKey="totalCallsRemoved" fill="#82ca9d" stackId="stack" />
-      <Line type="monotone" dataKey="segmentSize" stroke="#ff7300" />
+      <Bar
+        name="Added"
+        dataKey="totalCallsAdded"
+        fill="#6b5ad3"
+        stackId="stack"
+      />
+      <Bar
+        name="Removed"
+        dataKey="totalCallsRemoved"
+        fill="#999ea1"
+        stackId="stack"
+      />
+      <Line
+        name="Selection size"
+        type="monotone"
+        dataKey="segmentSize"
+        stroke="#2898f8"
+      />
     </ComposedChart>
   </ResponsiveContainer>
 )
