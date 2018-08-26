@@ -7,14 +7,17 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <div className="logo-container">
+          <img
+            className="logo"
+            src={tomato}
+            alr="tomato"
+            width="48"
+            height="48"
+          />
+        </div>
         <h1 className="title">Tomatoes chart</h1>
-        <img
-          className="logo"
-          src={tomato}
-          alr="tomato"
-          width="48"
-          height="48"
-        />
+
         <TicksContainer />
       </div>
     )

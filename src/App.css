@@ -5,9 +5,10 @@
 
 .App {
     max-width: 1280px;
+    padding: 0 40px;
     margin: auto;
     font-family: 'Raleway', sans-serif;
-    position: relative;
+
 }
 
 .title {
@@ -16,6 +17,10 @@
     line-height: 48px;
     text-transform: uppercase;
     margin-bottom: 52px;
+}
+
+.logo-container {
+    position: relative;
 }
 
 .logo {
