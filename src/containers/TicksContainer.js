@@ -6,7 +6,9 @@ import {
   getTicks,
   fetchTicks,
   groupByOneDay,
-  groupByFiveMinutes
+  groupByFiveMinutes,
+  getTimeFormat,
+  getGroupTime
 } from "../modules/ticks"
 import TicksChart from "../components/TicksChart"
 
@@ -28,21 +30,33 @@ class TicksContainer extends React.Component {
   }
 
   render() {
-    const { ticks, groupByFiveMinutes, groupByOneDay } = this.props
+    const {
+      ticks,
+      groupByFiveMinutes,
+      groupByOneDay,
+      timeFormat,
+      groupTime
+    } = this.props
     return (
       <div>
         <div>
           <button onClick={groupByFiveMinutes}>5 minutes</button>
           <button onClick={() => groupByOneDay()}>one day</button>
         </div>
-        <TicksChart ticks={this.props.ticks} />
+        <TicksChart
+          paddingTime={groupTime}
+          timeFormat={timeFormat}
+          ticks={ticks}
+        />
       </div>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  ticks: getTicks(state)
+  ticks: getTicks(state),
+  timeFormat: getTimeFormat(state),
+  groupTime: getGroupTime(state)
 })
 
 const mapDispatchToProps = {

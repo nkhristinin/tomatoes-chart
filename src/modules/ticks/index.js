@@ -12,7 +12,8 @@ const GROUP_BY = "ticks/GROUP_BY"
 type TicksStateType = {
   data: Array<Tick>,
   groupedBy: number,
-  ticksCount: number
+  ticksCount: number,
+  timeFormat: string
 }
 
 const FIVE_MINUTES = 1000 * 60 * 5
@@ -20,10 +21,23 @@ const ONE_HOUR = 1000 * 60 * 60
 const ONE_DAY = ONE_HOUR * 24
 const ONE_MONTH = ONE_DAY * 30
 
+const GROUP_5_MINUTES = {
+  groupedBy: FIVE_MINUTES,
+  ticksCount: ONE_HOUR / FIVE_MINUTES,
+  timeFormat: "HH:mm"
+}
+
+const GROUP_1_DAY = {
+  groupedBy: ONE_DAY,
+  ticksCount: ONE_MONTH / ONE_DAY,
+  timeFormat: "D MMM"
+}
+
 const initialState: TicksStateType = {
   data: [],
   groupedBy: FIVE_MINUTES,
-  ticksCount: ONE_HOUR / FIVE_MINUTES
+  ticksCount: ONE_HOUR / FIVE_MINUTES,
+  timeFormat: "HH:mm"
 }
 
 export default (
@@ -40,7 +54,8 @@ export default (
       return {
         ...state,
         groupedBy: action.groupedBy,
-        ticksCount: action.ticksCount
+        ticksCount: action.ticksCount,
+        timeFormat: action.timeFormat
       }
     default:
       return state
@@ -49,16 +64,10 @@ export default (
 
 //selectors
 
-const groupBy = (groupedBy, ticksCount) => ({
+const groupBy = groupParams => ({
   type: GROUP_BY,
-  groupedBy,
-  ticksCount
+  ...groupParams
 })
-
-export const groupByFiveMinutes = () =>
-  groupBy(FIVE_MINUTES, ONE_HOUR / FIVE_MINUTES)
-
-export const groupByOneDay = () => groupBy(ONE_DAY, ONE_MONTH / ONE_DAY)
 
 // Return ticks for charts
 // for opmiziation can use reselect or other solutions for memoisation
@@ -70,7 +79,15 @@ export const getTicks = ({ ticks: { data, groupedBy, ticksCount } }) =>
     ticksCount
   )
 
+export const getTimeFormat = state => state.ticks.timeFormat
+
+export const getGroupTime = state => state.ticks.groupedBy
 // actions
+
+export const groupByFiveMinutes = () => groupBy(GROUP_5_MINUTES)
+
+export const groupByOneDay = () => groupBy(GROUP_1_DAY)
+
 export const fetchTicks = () => dispatch => {
   return dispatch({
     type: GET_TICKS,

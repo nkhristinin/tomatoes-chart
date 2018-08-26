@@ -13,7 +13,7 @@ import {
 } from "recharts"
 import { format } from "date-fns"
 
-const TicksChart = ({ ticks }) => (
+const TicksChart = ({ ticks, timeFormat, paddingTime }) => (
   <ResponsiveContainer width="95%" height={500}>
     <ComposedChart
       data={ticks}
@@ -23,8 +23,11 @@ const TicksChart = ({ ticks }) => (
       <CartesianGrid strokeDasharray="5 5" />
       <XAxis
         type="number"
-        tickFormatter={unixtimestamp => format(unixtimestamp, "HH:mm")}
-        domain={["dataMin - 500000", "dataMax + 500000"]}
+        tickFormatter={unixtimestamp => format(unixtimestamp, timeFormat)}
+        domain={[
+          dataMin => dataMin - paddingTime,
+          dataMax => dataMax + paddingTime
+        ]}
         scale="time"
         dataKey="timestamp"
       />
