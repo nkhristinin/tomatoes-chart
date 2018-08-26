@@ -1,5 +1,7 @@
 # Tomatoes chart
 
+Link: https://tomatoes-chart.surge.sh/
+
 ## Data
 
 Random generate some ticks and update it every 10 seconds.
