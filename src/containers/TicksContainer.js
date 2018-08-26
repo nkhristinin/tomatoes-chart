@@ -48,7 +48,7 @@ class TicksContainer extends React.Component {
 
     return (
       <div>
-        {lastTickFromAPI && (
+        {lastTickFromAPI ? (
           <div>
             <div className="header-container">
               <StatusView
@@ -75,6 +75,8 @@ class TicksContainer extends React.Component {
               ticks={ticks}
             />
           </div>
+        ) : (
+          <div>Loading...</div>
         )}
       </div>
     )
