@@ -3,6 +3,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import { getTicks, fetchTicks } from "../modules/ticks"
+import TicksChart from "../components/TicksChart"
 
 class TicksContainer extends React.Component {
   componentDidMount() {
@@ -16,13 +17,13 @@ class TicksContainer extends React.Component {
       setTimeout(() => {
         fetchTicks()
         updateTicks()
-      }, 500)
+      }, 3000)
 
     updateTicks()
   }
 
   render() {
-    return <div>hello</div>
+    return <TicksChart ticks={this.props.ticks} />
   }
 }
 

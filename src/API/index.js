@@ -16,21 +16,24 @@ const getRandomPastTicks = (fromDate: number, count: number): Array<Tick> => {
       if (acc.length === 0) {
         newItem = {
           timestamp: getTime(fromDate),
-          totalCallsAdded: getRandomInt(20, 50),
-          totalCallsRemoved: -getRandomInt(0, 30),
+          totalCallsAdded: getRandomInt(0, 10),
+          totalCallsRemoved: -getRandomInt(0, 10),
           segmentSize: getRandomInt(0, 5)
         }
       } else {
         const prevItem = acc[acc.length - 1]
-        const newCallsAdded = getRandomInt(0, 50)
-        const newCallsRemoved = getRandomInt(0, 50)
+        const newCallsAdded = getRandomInt(0, 10)
+        const newCallsRemoved = getRandomInt(0, 10)
         newItem = {
           timestamp: getTime(
             subMinutes(prevItem.timestamp, getRandomInt(0, 10))
           ),
           totalCallsAdded: newCallsAdded,
           totalCallsRemoved: -newCallsRemoved,
-          segmentSize: prevItem.segmentSize - newCallsAdded + newCallsRemoved
+          segmentSize:
+            prevItem.segmentSize -
+            prevItem.totalCallsAdded -
+            prevItem.totalCallsRemoved
         }
       }
 
@@ -59,8 +62,8 @@ export const makeGetTicks = (intitialCount: number = 100) => {
 
       setTimeout(() => {
         const prevItem = data[data.length - 1]
-        const newCallsAdded = getRandomInt(0, 3)
-        const newCallsRemoved = getRandomInt(0, 3)
+        const newCallsAdded = getRandomInt(0, 10)
+        const newCallsRemoved = getRandomInt(0, 10)
 
         data.push({
           timestamp: getTime(new Date()),
@@ -71,7 +74,7 @@ export const makeGetTicks = (intitialCount: number = 100) => {
 
         isLoad = false
         addTicks()
-      }, 3000)
+      }, 10000)
     }
 
     addTicks()
