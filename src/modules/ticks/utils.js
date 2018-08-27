@@ -62,6 +62,10 @@ export const getTimestampsGroupedBy = (
     .reverse()
 }
 
+/*
+  Return the ticks for chart from some moment and group it,
+  fill empty space with previous value selection size
+*/
 export const getTicksForChart = (
   ticks: Array<Tick>,
   dateFrom: DateMs,
