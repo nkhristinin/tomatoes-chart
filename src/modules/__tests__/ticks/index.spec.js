@@ -56,6 +56,20 @@ describe("ticks reducers", () => {
       mode: "MODE_ONE_DAY"
     })
   })
+
+  it("should handle GET_TICKS", () => {
+    expect(
+      ticks(
+        { data: [1] },
+        {
+          type: "ticks/GET_TICKS",
+          ticks: [2, 3]
+        }
+      )
+    ).toEqual({
+      data: [2, 3]
+    })
+  })
 })
 
 describe("ticks selectors", () => {
