@@ -91,6 +91,7 @@ export const getTimeFormat = state => state.ticks.timeFormat
 export const getGroupTime = state => state.ticks.groupedBy
 
 export const getMode = state => state.ticks.mode
+
 // actions
 
 export const groupByFiveMinutes = () => groupBy(GROUP_5_MINUTES)
@@ -98,8 +99,10 @@ export const groupByFiveMinutes = () => groupBy(GROUP_5_MINUTES)
 export const groupByOneDay = () => groupBy(GROUP_1_DAY)
 
 export const fetchTicks = () => dispatch => {
-  return dispatch({
-    type: GET_TICKS,
-    ticks: fetchTicksFromAPI()
+  return fetchTicksFromAPI().then(ticks => {
+    return dispatch({
+      type: GET_TICKS,
+      ticks
+    })
   })
 }

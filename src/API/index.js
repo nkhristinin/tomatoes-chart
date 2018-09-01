@@ -72,7 +72,7 @@ export const makeGetTicks = (intitialCount: number = 100) => {
 
   let isLoad = false
 
-  const getTicks = (): Array<Tick> => {
+  const getTicks = (): Promise<Array<Tick>> => {
     const addTicks = () => {
       if (isLoad) return
       isLoad = true
@@ -95,7 +95,7 @@ export const makeGetTicks = (intitialCount: number = 100) => {
     }
 
     addTicks()
-    return data
+    return new Promise(res => res(data))
   }
 
   return getTicks
