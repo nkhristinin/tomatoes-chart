@@ -78,7 +78,7 @@ const groupBy = groupParams => ({
 export const getTicks = ({ ticks: { data, groupedBy, ticksCount } }) =>
   getTicksForChart(
     data,
-    getNearestRoundedTimeBy(new Date(), groupedBy),
+    getNearestRoundedTimeBy(Date.now(), groupedBy),
     groupedBy,
     ticksCount
   )

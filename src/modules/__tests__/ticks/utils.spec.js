@@ -4,7 +4,7 @@ import {
   getNearestRoundedTimeBy,
   getTimestampsGroupedBy,
   getTicksForChart
-} from "../ticks/utils"
+} from "../../ticks/utils"
 
 describe("utils", () => {
   describe("getNearestRoundedTimeBy", () => {
