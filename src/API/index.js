@@ -62,7 +62,7 @@ const getRandomPastTicks = (
  * getTicks() // return 5 ticks
  * getTicks() // return 6 ticks after 3 seconds
  */
-export const makeGetTicks = (intitialCount: number = 100) => {
+export const makeGetTicks = (intitialCount: number = 25) => {
   const dataMinutes: Array<Tick> = getRandomPastTicks(
     new Date(),
     intitialCount,
@@ -70,7 +70,7 @@ export const makeGetTicks = (intitialCount: number = 100) => {
   )
 
   const dataDays: Array<Tick> = getRandomPastTicks(
-    dataMinutes[dataMinutes.length - 1].timestamp,
+    dataMinutes[0].timestamp,
     40,
     time => subHours(time, getRandomInt(12, 48)),
     100

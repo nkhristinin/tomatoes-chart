@@ -1,3 +1,5 @@
+import configureMockStore from "redux-mock-store"
+import thunk from "redux-thunk"
 import ticks, {
   groupByFiveMinutes,
   groupByOneDay,
@@ -5,10 +7,31 @@ import ticks, {
   getGroupTime,
   getTimeFormat,
   getLastTickFromAPI,
-  getTicks
+  getTicks,
+  fetchTicks
 } from "../../ticks"
 
 import * as utils from "../../ticks/utils"
+import * as API from "../../../API"
+
+jest.mock("../../../API", function() {
+  return {
+    makeGetTicks: () => () =>
+      new Promise(res =>
+        res([
+          {
+            totalCallsRemoved: -2,
+            totalCallsAdded: 1,
+            timestamp: 3,
+            segmentSize: 4
+          }
+        ])
+      )
+  }
+})
+
+const middlewares = [thunk]
+const mockStore = configureMockStore(middlewares)
 
 const defaultTicksState = {
   data: [],
@@ -39,6 +62,25 @@ describe("ticks actions", () => {
       mode: "MODE_ONE_DAY"
     }
     expect(groupByOneDay()).toEqual(expectedAction)
+  })
+
+  it("should execute fetch api", () => {
+    const store = mockStore({})
+
+    return store.dispatch(fetchTicks()).then(() => {
+      const actions = store.getActions()
+      expect(actions[0]).toEqual({
+        type: "ticks/GET_TICKS",
+        ticks: [
+          {
+            totalCallsRemoved: -2,
+            totalCallsAdded: 1,
+            timestamp: 3,
+            segmentSize: 4
+          }
+        ]
+      })
+    })
   })
 })
 
