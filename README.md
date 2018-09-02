@@ -9,7 +9,7 @@ Segment size can be under 0 because random for ticks call.
 
 ## Real-time
 
-Simulate API fetch every 3 seconds.
+Get data from simple backend with websockets - https://github.com/hrnik/tomatoes-ws
 
 For best user experiencecd, added StatusView component, which renders data about current selection size and last updated calls. 
 
