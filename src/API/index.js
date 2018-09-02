@@ -9,24 +9,25 @@ const getRandomInt = (min: number, max: number): number =>
  * Ger random array of ticks from some date
  */
 const getRandomPastTicks = (
-  fromDate: number,
   count: number,
   diff: number => number,
-  range: number = 10
+  range: number = 10,
+  fromTick?: Tick
 ): Array<Tick> => {
   return Array(count)
     .fill(undefined)
     .reduce(acc => {
       let newItem = null
-      if (acc.length === 0) {
+      if (acc.length === 0 && !fromTick) {
         newItem = {
-          timestamp: getTime(fromDate),
+          timestamp: getTime(new Date()),
           totalCallsAdded: getRandomInt(0, 5),
           totalCallsRemoved: 0,
           segmentSize: getRandomInt(5, 15)
         }
       } else {
-        const prevItem = acc[acc.length - 1]
+        const prevItem =
+          fromTick && acc.length === 0 ? fromTick : acc[acc.length - 1]
 
         const newSegmentSize =
           prevItem.segmentSize -
@@ -63,17 +64,15 @@ const getRandomPastTicks = (
  * getTicks() // return 6 ticks after 3 seconds
  */
 export const makeGetTicks = (intitialCount: number = 25) => {
-  const dataMinutes: Array<Tick> = getRandomPastTicks(
-    new Date(),
-    intitialCount,
-    time => subMinutes(time, getRandomInt(0, 10))
+  const dataMinutes: Array<Tick> = getRandomPastTicks(intitialCount, time =>
+    subMinutes(time, getRandomInt(0, 10))
   )
 
   const dataDays: Array<Tick> = getRandomPastTicks(
-    dataMinutes[0].timestamp,
     40,
     time => subHours(time, getRandomInt(12, 48)),
-    100
+    100,
+    dataMinutes[0]
   )
 
   let data: Array<Tick> = dataDays.concat(dataMinutes)
