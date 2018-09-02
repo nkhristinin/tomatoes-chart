@@ -115,7 +115,11 @@ export const addNewTick = tick => ({
 })
 
 export const fetchTicks = () => dispatch => {
-  const socket = io("https://tomatoes-ws-kneigjbzsl.now.sh/")
+  const socket = io(
+    process.env.NODE_ENV === "production"
+      ? "https://tomatoes-ws-xgkvesgzgc.now.sh"
+      : "localhost:5000"
+  )
   socket.on("old data", ticks => dispatch(addOldTicks(ticks)))
   socket.on("new item", tick => dispatch(addNewTick(tick)))
 }
