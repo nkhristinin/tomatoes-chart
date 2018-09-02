@@ -1,11 +1,10 @@
 // @flow
-import { makeGetTicks } from "../../API"
+import io from "socket.io-client"
 import { getTicksForChart, getNearestRoundedTimeBy } from "./utils"
 
-const fetchTicksFromAPI = makeGetTicks()
-
 // constants
-const GET_TICKS = "ticks/GET_TICKS"
+const ADD_OLD_TICKS = "ticks/ADD_OLD_TICKS"
+const ADD_NEW_TICK = "ticks/ADD_TICK"
 const GROUP_BY = "ticks/GROUP_BY"
 
 const FIVE_MINUTES = 1000 * 60 * 5
@@ -48,10 +47,17 @@ export default (
   action
 ): TicksStateType => {
   switch (action.type) {
-    case GET_TICKS:
+    case ADD_OLD_TICKS:
       return {
         ...state,
         data: action.ticks
+      }
+    case ADD_NEW_TICK:
+      const newData = state.data.slice()
+      newData.push(action.tick)
+      return {
+        ...state,
+        data: newData
       }
     case GROUP_BY:
       return {
@@ -98,11 +104,18 @@ export const groupByFiveMinutes = () => groupBy(GROUP_5_MINUTES)
 
 export const groupByOneDay = () => groupBy(GROUP_1_DAY)
 
+export const addOldTicks = ticks => ({
+  type: ADD_OLD_TICKS,
+  ticks
+})
+
+export const addNewTick = tick => ({
+  type: ADD_NEW_TICK,
+  tick
+})
+
 export const fetchTicks = () => dispatch => {
-  return fetchTicksFromAPI().then(ticks => {
-    return dispatch({
-      type: GET_TICKS,
-      ticks
-    })
-  })
+  const socket = io("https://tomatoes-ws-kneigjbzsl.now.sh/")
+  socket.on("old data", ticks => dispatch(addOldTicks(ticks)))
+  socket.on("new item", tick => dispatch(addNewTick(tick)))
 }

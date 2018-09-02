@@ -1,4 +1,5 @@
 import configureMockStore from "redux-mock-store"
+import io from "socket.io-client"
 import thunk from "redux-thunk"
 import ticks, {
   groupByFiveMinutes,
@@ -12,22 +13,10 @@ import ticks, {
 } from "../../ticks"
 
 import * as utils from "../../ticks/utils"
-import * as API from "../../../API"
 
-jest.mock("../../../API", function() {
-  return {
-    makeGetTicks: () => () =>
-      new Promise(res =>
-        res([
-          {
-            totalCallsRemoved: -2,
-            totalCallsAdded: 1,
-            timestamp: 3,
-            segmentSize: 4
-          }
-        ])
-      )
-  }
+const mockOnFn = jest.fn()
+jest.mock("socket.io-client", function() {
+  return () => ({ on: mockOnFn })
 })
 
 const middlewares = [thunk]
@@ -64,23 +53,12 @@ describe("ticks actions", () => {
     expect(groupByOneDay()).toEqual(expectedAction)
   })
 
-  it("should execute fetch api", () => {
+  it("should call socket.io", () => {
     const store = mockStore({})
 
-    return store.dispatch(fetchTicks()).then(() => {
-      const actions = store.getActions()
-      expect(actions[0]).toEqual({
-        type: "ticks/GET_TICKS",
-        ticks: [
-          {
-            totalCallsRemoved: -2,
-            totalCallsAdded: 1,
-            timestamp: 3,
-            segmentSize: 4
-          }
-        ]
-      })
-    })
+    store.dispatch(fetchTicks())
+
+    expect(mockOnFn).toHaveBeenCalledTimes(2)
   })
 })
 
@@ -99,17 +77,31 @@ describe("ticks reducers", () => {
     })
   })
 
-  it("should handle GET_TICKS", () => {
+  it("should handle ADD_OLD_TICKS", () => {
     expect(
       ticks(
-        { data: [1] },
+        { data: [] },
         {
-          type: "ticks/GET_TICKS",
+          type: "ticks/ADD_OLD_TICKS",
           ticks: [2, 3]
         }
       )
     ).toEqual({
       data: [2, 3]
+    })
+  })
+
+  it("should handle ADD_TICK", () => {
+    expect(
+      ticks(
+        { data: [2, 3] },
+        {
+          type: "ticks/ADD_TICK",
+          tick: 4
+        }
+      )
+    ).toEqual({
+      data: [2, 3, 4]
     })
   })
 })

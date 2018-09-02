@@ -20,19 +20,7 @@ import Tab from "../components/Tab"
 
 class TicksContainer extends React.Component {
   componentDidMount() {
-    this.fetchTicksFromStreamAPI()
-  }
-
-  fetchTicksFromStreamAPI() {
-    const { fetchTicks } = this.props
-
-    const updateTicks = () =>
-      setTimeout(() => {
-        fetchTicks()
-        updateTicks()
-      }, 3000)
-
-    updateTicks()
+    this.props.fetchTicks()
   }
 
   render() {
