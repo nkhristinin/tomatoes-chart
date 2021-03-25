@@ -1,6 +1,6 @@
 # Tomatoes chart
 
-Link: https://tomatoes-chart.surge.sh/
+Link:
 
 ## Data
 
